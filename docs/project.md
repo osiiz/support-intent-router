@@ -22,6 +22,17 @@ model is sufficient and what a pretrained representation adds.
   focused and reviewable.
 - Prefer simple implementations. Add dependencies and infrastructure only when
   required by the current milestone.
+- Work through implementation with the user as the code author. Agents explain
+  choices, review and run the user's code, and suggest focused corrections; do
+  not write or edit implementation code unless the user explicitly asks. This
+  supports the user's goal of understanding the whole project without rushing.
+- Use pandas for the initial data inspection, following the user's implementation
+  choice. Record the dependency version so the inspection can be reproduced.
+- Keep the script dependencies in the `experiment` dependency group in
+  [pyproject.toml](../pyproject.toml): pandas `3.0.6` and scikit-learn `1.9.1`.
+  This supports the current scripts without introducing package build metadata.
+  The split manifest records Python and relevant installed dependency versions;
+  transitive dependencies are not yet locked.
 
 ## Milestones
 
@@ -38,8 +49,15 @@ model is sufficient and what a pretrained representation adds.
 ## Evaluation protocol
 
 - Create stratified model-training, development, and calibration subsets from the
-  official training split. Record exact sizes, seeds, split identifiers, and
-  purposes before running experiments. These values are not chosen yet.
+  official training split with seed `42` in both splitting calls. Allocate 70%
+  to model training (7,002 rows), then split the 30% holdout equally into
+  development (1,500 rows) and calibration (1,501 rows). Stratify each call on
+  its input's `category` column so every subset contains all 77 intents.
+- Record the pinned source download URL, SHA-256 fingerprint, split settings,
+  installed versions, and ordered source row IDs in
+  [the split manifest](../configs/banking77_split.json). Preserve source row IDs
+  in the exported CSVs to verify membership and trace examples to the source.
+  Run the data scripts from the repository root; local data stays ignored.
 - Fit learned preprocessing and classifiers on model-training data only. Use
   development data for model and policy selection, and the separate calibration
   subset to fit calibration.
