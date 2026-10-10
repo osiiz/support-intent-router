@@ -2,16 +2,39 @@
 
 ## Context
 
-Read `docs/project.md` and `docs/progress.md` before making changes. Keep the README minimal until there is a working implementation.
+Read [the project plan](docs/project.md) and [current progress](docs/progress.md)
+before making changes. Follow the agreed scope and evaluation protocol in the
+project plan; keep proposed choices distinct from agreed decisions.
 
-This system routes requests to known intents or human review. Routing does not mean resolving a request. Describe confidence and escalation as evaluated behavior, not guarantees.
+## Documentation responsibilities
+
+- `README.md`: public introduction, implemented capabilities, and entry points to
+  the project documentation. Keep it minimal while the implementation develops.
+- `docs/project.md`: purpose, scope, milestones, lasting technical decisions and
+  their reasons, evaluation protocol, and open proposals. Keep agent behavior and
+  repository housekeeping rules here in `AGENTS.md` instead.
+- `docs/progress.md`: completed work, verification evidence, the next step, and
+  active blockers. Keep it concise; do not duplicate the project plan or retain
+  resolved setup issues as blockers.
+- `pyproject.toml` and experiment manifests: exact dependency declarations and
+  machine-readable experiment settings. Link to them from prose rather than
+  maintaining duplicate version lists.
+- Update documentation for meaningful milestones, lasting decisions, changes to
+  the next step, or blockers that affect future sessions. Do not update it for
+  every small implementation step or review exchange.
+
+## Guided implementation
+
+The user writes the implementation to understand the whole project. Explain
+choices, review and run the user's code, and suggest focused corrections. Code
+examples in conversation are welcome; do not write or edit implementation files
+unless the user explicitly asks. Documentation edits are allowed within the
+responsibilities above.
 
 ## Working practices
 
 - Make small, focused changes that advance the current milestone.
 - Prefer simple, reproducible implementations. Add dependencies and infrastructure only when needed.
-- Record lasting decisions and their reasons in `docs/project.md`. Distinguish agreed choices from proposals.
-- Update `docs/progress.md` when work is completed, the next step changes, or a blocker affects future sessions. Keep it concise.
 - Preserve unrelated user changes.
 - The user is responsible for making commits. Agents must not commit or push on
   their own. When a meaningful feature or milestone is completed and verified,
@@ -20,18 +43,11 @@ This system routes requests to known intents or human review. Routing does not m
 - Run checks appropriate to the change and report checks that could not run. Documentation-only changes need accuracy and link review, not new tests.
 - Do not invent results, completed checks, or setup commands that have not been verified.
 - Do not commit credentials, private customer messages, local environments, downloaded datasets, or generated model artifacts. Add ignore rules when introducing these files.
+- Run the current data scripts from the repository root, because their paths are
+  relative to that directory.
 
-## Modeling and evaluation
+## Reporting
 
-- Start with TF-IDF plus logistic regression, then frozen sentence embeddings plus logistic regression.
-- Fit preprocessing on training data only. Reserve the official test split for final evaluation.
-- Create held-out development and calibration subsets from training data. Record split sizes, seeds, and purposes.
-- Tune escalation thresholds using development data and freeze them before final testing.
-- Keep unsupported-request development examples separate from final challenge examples. Document provenance, labeling rules, and synthetic generation.
-- Evaluate supported-intent classification, calibration, selective routing, and unsupported-request detection separately.
-- Include preprocessing and encoding in inference latency. Record hardware and measurement conditions.
-- Save experiment configuration and results so the comparison can be reproduced.
-
-## Current scope
-
-The first milestone is a reproducible baseline experiment. Calibration, rejection policies, and the review demo follow. The application stack, encoder, deployment, license, and operating target remain open decisions.
+Describe confidence and escalation as evaluated behavior, not guarantees. Routing
+does not mean resolving a request. Report only capabilities and results supported
+by the implementation and completed checks.

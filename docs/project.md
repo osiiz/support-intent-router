@@ -20,16 +20,9 @@ model is sufficient and what a pretrained representation adds.
 - Complete a reproducible baseline experiment first. Add calibration, rejection
   policies, and the review demo in later milestones so the first result remains
   focused and reviewable.
-- Prefer simple implementations. Add dependencies and infrastructure only when
-  required by the current milestone.
-- Work through implementation with the user as the code author. Agents explain
-  choices, review and run the user's code, and suggest focused corrections; do
-  not write or edit implementation code unless the user explicitly asks. This
-  supports the user's goal of understanding the whole project without rushing.
-- Use pandas for the initial data inspection, following the user's implementation
-  choice. Record the dependency version so the inspection can be reproduced.
+- Use pandas for tabular data inspection and CSV handling.
 - Keep the script dependencies in the `experiment` dependency group in
-  [pyproject.toml](../pyproject.toml): pandas `3.0.6` and scikit-learn `1.9.1`.
+  [pyproject.toml](../pyproject.toml).
   This supports the current scripts without introducing package build metadata.
   The split manifest records Python and relevant installed dependency versions;
   transitive dependencies are not yet locked.
@@ -57,7 +50,6 @@ model is sufficient and what a pretrained representation adds.
   installed versions, and ordered source row IDs in
   [the split manifest](../configs/banking77_split.json). Preserve source row IDs
   in the exported CSVs to verify membership and trace examples to the source.
-  Run the data scripts from the repository root; local data stays ignored.
 - Fit learned preprocessing and classifiers on model-training data only. Use
   development data for model and policy selection, and the separate calibration
   subset to fit calibration.
@@ -75,8 +67,7 @@ model is sufficient and what a pretrained representation adds.
 - Include preprocessing and encoding in inference latency. Record hardware,
   batching, warm-up, and measurement conditions.
 - Save dataset and encoder revisions, dependency versions, configuration, seeds,
-  and results so the comparison can be reproduced. Keep raw data and generated
-  model artifacts out of Git; retain shareable configurations and metrics.
+  and results so the comparison can be reproduced.
 
 ## Proposals and open decisions
 
@@ -92,10 +83,3 @@ Proposals to assess in later milestones:
   data. Evaluate supported-request typos and paraphrases separately as robustness.
 - Use reliability plots, log loss, p50/p95 latency, and uncertainty estimates to
   supplement the core results.
-
-## Repository practice
-
-Keep the README short until there is a working implementation. Store lasting
-decisions here and session status in [progress.md](progress.md). Never check in
-credentials, private customer messages, downloaded datasets, local environments,
-or generated model artifacts.
