@@ -1,0 +1,42 @@
+# Local agent configuration and credentials
+.agents/
+.codex/
+.aws/
+.env
+.env.*
+!.env.example
+
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.egg-info/
+
+# Downloaded data and private request data
+/data/
+/datasets/
+/private/
+
+# Generated models, embeddings, and local experiment outputs
+# Keep shareable experiment configurations and metrics outside these directories.
+/models/
+/artifacts/
+/outputs/
+*.pkl
+*.pickle
+*.joblib
+*.pt
+*.pth
+*.onnx
+*.safetensors
+.cache/
+*.log
+
+# OS metadata
+.DS_Store
+Thumbs.db
