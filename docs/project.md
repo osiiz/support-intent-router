@@ -66,6 +66,11 @@ model is sufficient and what a pretrained representation adds.
   separately. Coverage means the proportion automatically routed, not resolved.
 - Include preprocessing and encoding in inference latency. Record hardware,
   batching, warm-up, and measurement conditions.
+- The initial TF-IDF latency measurement times individual calls to an
+  already-loaded pipeline's `predict` method and reports p50/p95 durations.
+  It covers text processing and classification. It excludes model loading and
+  application overhead; hardware, warm-up, workload order, and thread-control
+  conditions are recorded in [the experiment record](../results/tfidf_logreg_v1.json).
 - Save dataset and encoder revisions, dependency versions, configuration, seeds,
   and results so the comparison can be reproduced.
 
@@ -81,5 +86,5 @@ Proposals to assess in later milestones:
   after fitting a calibrator.
 - Include both clearly unrelated and unsupported banking requests in the challenge
   data. Evaluate supported-request typos and paraphrases separately as robustness.
-- Use reliability plots, log loss, p50/p95 latency, and uncertainty estimates to
+- Use reliability plots, log loss, and uncertainty estimates to
   supplement the core results.
