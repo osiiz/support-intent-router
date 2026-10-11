@@ -5,7 +5,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import accuracy_score, classification_report, f1_score
-import hashlib, json, platform, os
+import hashlib, json, platform, os, argparse
 from importlib.metadata import version
 
 data_dir = Path("data/processed/banking77")
@@ -13,17 +13,22 @@ data_dir = Path("data/processed/banking77")
 train_df = pd.read_csv(data_dir / "train.csv", index_col="source_row_id")
 develop_df = pd.read_csv(data_dir / "develop.csv", index_col="source_row_id")
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--c", type=float, default=1.0, help="Inverse regularization strength for logistic regression")
+
+args = parser.parse_args()
+
 X_train, y_train = train_df["text"], train_df["category"]
 X_develop, y_develop = develop_df["text"], develop_df["category"]
 
 model = Pipeline([
     ("tfidf", TfidfVectorizer(ngram_range=(1, 2))),
     ("classifier", LogisticRegression(
-        C=1.0, solver="lbfgs", max_iter=1000,
+        C=args.c, solver="lbfgs", max_iter=1000,
     )),
 ])
 
-print("Training model...", flush=True)
+print(f"Training model with C={args.c:g}...", flush=True)
 started = perf_counter()
 
 model.fit(X_train, y_train)
@@ -129,7 +134,7 @@ latency = {
 print(f"\nInference latency p50: {latency['p50_ms']:.3f} ms")
 print(f"Inference latency p95: {latency['p95_ms']:.3f} ms")
 
-run_name = "tfidf_logreg_v1"
+run_name = f"tfidf_logreg_c{args.c:g}"
 split_manifest_path = Path("configs/banking77_split.json")
 
 tfidf_params = model.named_steps["tfidf"].get_params()

@@ -24,6 +24,18 @@ Completed:
 - Saved the initial configuration, full-precision metrics for all 77 intents,
   split provenance, dependency versions, and latency conditions in
   [the initial experiment record](../results/tfidf_logreg_v1.json).
+- Completed a development sweep over logistic regression `C=0.1` and integer
+  values `1` through `10`, with separate saved results and
+  [a comparison script](../scripts/compare_tfidf.py). [C=0.1](../results/tfidf_logreg_c0.1.json)
+  scored approximately `0.5818` macro-F1; the initial `C=1` scored `0.8286`;
+  [C=10](../results/tfidf_logreg_c10.json) scored `0.8710`, with accuracy `0.8687`
+  and 197 errors. Gains largely plateau around `C=4`. `C=9` also made 197 errors;
+  its macro-F1 is only approximately `0.000184` below `C=10`.
+- Checked all 11 saved records: configurations differ only in `C`, with matching
+  versions, split fingerprints, and class supports. Aggregate scores agree with
+  error counts and per-intent metrics. The user reports the computer was busy
+  during the sweep; its timing measurements are unsuitable for a fair speed
+  comparison. Classification results remain usable.
 
 Validation: rerunning `.venv/bin/python scripts/split_data.py` produced identical
 CSV and manifest bytes. Independent checks confirmed the source fingerprint,
@@ -43,9 +55,11 @@ threads are not controlled by the benchmark.
 
 ## Next step
 
-Propose a commit for the completed initial TF-IDF experiment. Then compare a
-small set of logistic regression `C` values, holding TF-IDF settings and splits
-fixed and preserving the initial result. Follow the
+Propose a commit for the completed regularization sweep. `C=10` is the best
+tested TF-IDF setting by development macro-F1; using it as the comparison
+candidate is proposed. Choose a frozen sentence encoder for the second baseline
+and use comparable, controlled timing conditions when measuring both models.
+Follow the
 [evaluation protocol](project.md#evaluation-protocol) for calibration and final
 testing.
 
